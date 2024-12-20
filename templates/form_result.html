@@ -1,0 +1,23 @@
+from flask import Flask, render_template, request
+import datetime
+
+app = Flask(__name__)
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        address = request.form['address']
+        date = datetime.datetime.now().strftime('%Y-%m-%d')
+
+        # Guarda los datos en un archivo
+        with open('datos.txt', 'a') as archivo:
+            archivo.write(f'Nombre: {name}, Email: {email}, Dirección: {address}, Fecha: {date}\n')
+
+        return render_template('index.html', name=name, email=email, address=address, date=date)
+    else:
+        return render_template('index.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
